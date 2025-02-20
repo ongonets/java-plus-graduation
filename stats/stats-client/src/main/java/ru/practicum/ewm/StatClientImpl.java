@@ -33,7 +33,7 @@ public class StatClientImpl implements StatClient {
                 .bodyValue(hitDto)
                 .retrieve()
                 .toBodilessEntity()
-//                .doOnError(error -> log.error("An error has occurred {}", error.getMessage()))
+                .doOnError(error -> log.error("An error has occurred {}", error.getMessage()))
                 .onErrorComplete()
                 .block();
     }
