@@ -13,7 +13,6 @@ import ru.practicum.ewm.StatClient;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.dto.HitDto;
-import ru.practicum.ewm.dto.ParamDto;
 import ru.practicum.ewm.dto.StatDto;
 import ru.practicum.ewm.errorHandler.exception.ConflictDataException;
 import ru.practicum.ewm.errorHandler.exception.NotFoundException;
