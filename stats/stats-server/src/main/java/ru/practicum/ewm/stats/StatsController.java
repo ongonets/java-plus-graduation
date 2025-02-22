@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.StatClient;
 import ru.practicum.ewm.dto.HitDto;
 import ru.practicum.ewm.dto.StatDto;
 import ru.practicum.ewm.stats.service.StatsService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class StatsController {
+public class StatsController implements StatClient {
     private final StatsService statsService;
 
     @PostMapping("/hit")
@@ -21,8 +22,10 @@ public class StatsController {
         statsService.addHit(hitDto);
     }
 
+
+
     @GetMapping("/stats")
-    public List<StatDto> getStats(@RequestParam String start,
+    public List<StatDto> stat(@RequestParam String start,
                                   @RequestParam String end,
                                   @RequestParam(required = false) List<String> uris,
                                   @RequestParam(defaultValue = "false") Boolean unique

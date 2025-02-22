@@ -197,8 +197,7 @@ public class EventServiceImpl implements EventService {
         List<String> uris = events.stream().map(this::createEventUri).toList();
         String start = events.stream().map(Event::getCreatedOn).sorted().findFirst().get().format(dateTimeFormatter);
         String end = LocalDateTime.now().format(dateTimeFormatter);
-        ParamDto paramDto = new ParamDto(start, end, uris, true);
-        List<StatDto> statDto = statClient.stat(paramDto);
+        List<StatDto> statDto = statClient.stat(start, end, uris, true);
         return statDto.stream().map(dto -> new StatEventDto(parseUri(dto.getUri()), dto.getHits()))
                 .collect(Collectors.toMap(StatEventDto::getEventId, StatEventDto::getHits));
     }
