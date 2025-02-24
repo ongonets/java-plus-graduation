@@ -3,7 +3,7 @@ package ru.practicum.ewm.comment.service;
 import ru.practicum.ewm.comment.dto.CommentDto;
 import ru.practicum.ewm.comment.dto.NewCommentRequest;
 import ru.practicum.ewm.comment.dto.params.CommentParams;
-import ru.practicum.ewm.event.dto.ParamEventDto;
+import ru.practicum.ewm.dto.ParamEventDto;
 
 import java.util.List;
 

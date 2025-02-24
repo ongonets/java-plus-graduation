@@ -1,6 +1,6 @@
 package ru.practicum.ewm.request.service;
 
-import ru.practicum.ewm.event.dto.ParamEventDto;
+import ru.practicum.ewm.dto.ParamEventDto;
 import ru.practicum.ewm.request.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.ewm.request.dto.EventRequestStatusUpdateResult;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;

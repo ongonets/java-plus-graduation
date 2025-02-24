@@ -13,9 +13,9 @@ import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.exception.AccessForbiddenException;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.ewm.event.dto.ParamEventDto;
-import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.event.repository.EventRepository;
+import ru.practicum.ewm.dto.ParamEventDto;
+import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.UserRepository;
 

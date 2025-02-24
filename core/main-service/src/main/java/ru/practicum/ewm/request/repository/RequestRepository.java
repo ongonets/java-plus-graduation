@@ -3,7 +3,7 @@ package ru.practicum.ewm.request.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.request.dto.RequestCountDto;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.model.User;
