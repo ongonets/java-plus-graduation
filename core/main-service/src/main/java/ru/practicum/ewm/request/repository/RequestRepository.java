@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.request.dto.RequestCountDto;
 import ru.practicum.ewm.request.model.Request;
-import ru.practicum.ewm.user.model.User;
+import ru.practicum.ewm.model.User;
 
 import java.util.List;
 import java.util.stream.Stream;

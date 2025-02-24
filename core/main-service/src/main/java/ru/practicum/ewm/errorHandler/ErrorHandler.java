@@ -7,8 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.ewm.errorHandler.exception.*;
 import ru.practicum.ewm.errorHandler.model.ApiError;
+import ru.practicum.ewm.exception.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

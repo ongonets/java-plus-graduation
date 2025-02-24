@@ -7,7 +7,7 @@ import ru.practicum.ewm.comment.dto.CommentDto;
 import ru.practicum.ewm.comment.dto.NewCommentRequest;
 import ru.practicum.ewm.comment.model.Comment;
 import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.user.model.User;
+import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
