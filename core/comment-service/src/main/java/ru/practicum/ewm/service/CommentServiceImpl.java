@@ -1,15 +1,15 @@
-package ru.practicum.ewm.comment.service;
+package ru.practicum.ewm.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.comment.dto.CommentDto;
-import ru.practicum.ewm.comment.dto.NewCommentRequest;
-import ru.practicum.ewm.comment.dto.params.CommentParams;
-import ru.practicum.ewm.comment.mapper.CommentMapper;
-import ru.practicum.ewm.comment.model.Comment;
-import ru.practicum.ewm.comment.repository.CommentRepository;
+import ru.practicum.ewm.dto.CommentDto;
+import ru.practicum.ewm.dto.NewCommentRequest;
+import ru.practicum.ewm.dto.params.CommentParams;
+import ru.practicum.ewm.mapper.CommentMapper;
+import ru.practicum.ewm.model.Comment;
+import ru.practicum.ewm.repository.CommentRepository;
 import ru.practicum.ewm.exception.AccessForbiddenException;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;

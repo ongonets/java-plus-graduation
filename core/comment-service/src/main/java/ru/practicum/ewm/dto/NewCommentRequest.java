@@ -1,4 +1,4 @@
-package ru.practicum.ewm.comment.dto;
+package ru.practicum.ewm.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

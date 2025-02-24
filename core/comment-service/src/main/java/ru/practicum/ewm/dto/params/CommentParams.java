@@ -1,4 +1,4 @@
-package ru.practicum.ewm.comment.dto.params;
+package ru.practicum.ewm.dto.params;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreateCommentParams {
+public class CommentParams {
     long userId;
-    long eventId;
+    long commentId;
 }

@@ -1,11 +1,11 @@
-package ru.practicum.ewm.comment.mapper;
+package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import ru.practicum.ewm.comment.dto.CommentDto;
-import ru.practicum.ewm.comment.dto.NewCommentRequest;
-import ru.practicum.ewm.comment.model.Comment;
+import ru.practicum.ewm.dto.CommentDto;
+import ru.practicum.ewm.dto.NewCommentRequest;
+import ru.practicum.ewm.model.Comment;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.User;
 

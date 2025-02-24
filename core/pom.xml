@@ -18,6 +18,7 @@
         <module>user-service</module>
         <module>interaction-api</module>
         <module>event-service</module>
+        <module>comment-service</module>
     </modules>
 
 

@@ -1,9 +1,7 @@
-package ru.practicum.ewm.comment.model;
+package ru.practicum.ewm.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 
