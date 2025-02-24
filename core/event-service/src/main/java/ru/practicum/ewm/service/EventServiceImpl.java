@@ -13,11 +13,9 @@ import ru.practicum.ewm.StatClient;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.dto.*;
-import ru.practicum.ewm.dto.StatDto;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.mapper.EventMapper;
-import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.UserRepository;
@@ -263,7 +261,7 @@ public class EventServiceImpl implements EventService {
     private Predicate buildQueryAdmin(AdminSearchEventDto params) {
         BooleanBuilder searchParams = new BooleanBuilder();
 
-        if (params.getUsers() != null && !params.getUsers().isEmpty()) {
+        /*if (params.getUsers() != null && !params.getUsers().isEmpty()) {
             searchParams.and(QEvent.event.initiator.id.in(params.getUsers()));
         }
         if (params.getStates() != null && !params.getStates().isEmpty()) {
@@ -277,7 +275,7 @@ public class EventServiceImpl implements EventService {
         }
         if (params.getRangeEnd() != null) {
             searchParams.and(QEvent.event.eventDate.before(params.getRangeEnd()));
-        }
+        }*/
 
         return searchParams;
     }
@@ -285,7 +283,7 @@ public class EventServiceImpl implements EventService {
     private Predicate buildQueryPublic(PublicSearchEventParams params) {
         BooleanBuilder searchParams = new BooleanBuilder();
 
-        if (params.getText() != null && !params.getText().isBlank()) {
+       /* if (params.getText() != null && !params.getText().isBlank()) {
             searchParams.and(QEvent.event.description.contains(params.getText())
                     .or(QEvent.event.annotation.contains(params.getText())));
         }
@@ -300,7 +298,7 @@ public class EventServiceImpl implements EventService {
         }
         if (params.getRangeEnd() != null) {
             searchParams.and(QEvent.event.eventDate.before(params.getRangeEnd()));
-        }
+        }*/
 
         return searchParams;
     }

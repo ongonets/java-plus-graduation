@@ -1,10 +1,10 @@
-package ru.practicum.ewm.request.mapper;
+package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.ewm.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.request.dto.ParticipationRequestDto;
-import ru.practicum.ewm.request.model.Request;
+import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.model.Request;
 
 import java.util.List;
 

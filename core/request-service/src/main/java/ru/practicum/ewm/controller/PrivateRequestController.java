@@ -1,4 +1,4 @@
-package ru.practicum.ewm.request.controller;
+package ru.practicum.ewm.controller;
 
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.ParamEventDto;
-import ru.practicum.ewm.request.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewm.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.request.dto.ParticipationRequestDto;
-import ru.practicum.ewm.request.service.RequestService;
+import ru.practicum.ewm.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.service.RequestService;
 
 import java.util.List;
 

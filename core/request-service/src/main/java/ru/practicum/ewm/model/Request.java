@@ -1,11 +1,9 @@
-package ru.practicum.ewm.request.model;
+package ru.practicum.ewm.model;
 
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 

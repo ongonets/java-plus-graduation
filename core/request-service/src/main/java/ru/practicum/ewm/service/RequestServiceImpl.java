@@ -1,4 +1,4 @@
-package ru.practicum.ewm.request.service;
+package ru.practicum.ewm.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +10,13 @@ import ru.practicum.ewm.dto.ParamEventDto;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.request.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewm.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.request.dto.ParticipationRequestDto;
-import ru.practicum.ewm.request.mapper.RequestMapper;
-import ru.practicum.ewm.request.model.Request;
-import ru.practicum.ewm.request.model.RequestStatus;
-import ru.practicum.ewm.request.repository.RequestRepository;
+import ru.practicum.ewm.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.mapper.RequestMapper;
+import ru.practicum.ewm.model.Request;
+import ru.practicum.ewm.model.RequestStatus;
+import ru.practicum.ewm.repository.RequestRepository;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.UserRepository;
 
