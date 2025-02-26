@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 public class PrivateSearchEventDto {
     long userId;
-    long from;
-    long size;
+    int from;
+    int size;
     String ip;
 }

@@ -1,4 +1,4 @@
-package ru.practicum.ewm.errorHandler;
+package ru.practicum.ewm.controller;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.ewm.errorHandler.model.ApiError;
+import ru.practicum.ewm.dto.ApiError;
 import ru.practicum.ewm.exception.*;
 
 import java.io.PrintWriter;

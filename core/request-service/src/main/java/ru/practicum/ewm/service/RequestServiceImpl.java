@@ -1,24 +1,21 @@
 package ru.practicum.ewm.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.controller.UserClient;
+import ru.practicum.ewm.dto.*;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.ewm.dto.ParamEventDto;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.mapper.RequestMapper;
 import ru.practicum.ewm.model.Request;
 import ru.practicum.ewm.model.RequestStatus;
 import ru.practicum.ewm.repository.RequestRepository;
-import ru.practicum.ewm.model.User;
-import ru.practicum.ewm.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,22 +28,21 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+    private final UserClient userClient;
     private final RequestMapper requestMapper;
 
     @Override
     public List<ParticipationRequestDto> findRequest(long userId) {
-        User user = getUser(userId);
-        List<Request> requests = requestRepository.findAllByUser(user);
+        List<Request> requests = requestRepository.findAllByUserId(userId);
         return requestMapper.mapToDto(requests);
     }
 
     @Override
     public ParticipationRequestDto createRequest(long userId, long eventId) {
-        User user = getUser(userId);
+        UserShortDto user = getUser(userId);
         Event event = getEvent(eventId);
         validateRequest(user, event);
-        Request request = new Request(event, user);
+        Request request = new Request(event, user.getId());
         if (!event.isRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(RequestStatus.CONFIRMED);
         }
@@ -56,8 +52,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto cancelRequest(long userId, long requestId) {
-        User user = getUser(userId);
-        Request request = getRequest(requestId, user);
+        Request request = getRequest(requestId, userId);
         request.setStatus(RequestStatus.CANCELED);
         requestRepository.save(request);
         return requestMapper.mapToDto(request);
@@ -90,12 +85,13 @@ public class RequestServiceImpl implements RequestService {
         return requestMapper.mapToRequestStatus(confirmedRequests, rejectedRequests);
     }
 
-    private User getUser(long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("Not found user with ID = {}", userId);
-                    return new NotFoundException(String.format("Not found user with ID = %d", userId));
-                });
+    private UserShortDto getUser(long userId) {
+        try {
+            return userClient.findShortUsers(List.of(userId)).getFirst();
+        } catch (FeignException e) {
+            log.error("Not found user with ID = {}", userId);
+            throw new NotFoundException(String.format("Not found user with ID = %d", userId));
+        }
     }
 
     private Event getEvent(long eventId) {
@@ -109,9 +105,8 @@ public class RequestServiceImpl implements RequestService {
     private Event getUserEvent(ParamEventDto paramEventDto) {
         long userId = paramEventDto.getUserId();
         long eventId = paramEventDto.getEventId();
-        User user = getUser(userId);
         Event event = getEvent(eventId);
-        if (event.getInitiator() != user) {
+        if (event.getInitiatorId() != paramEventDto.getUserId()) {
             log.error("Not found event with ID = {}", eventId);
             throw new NotFoundException(
                     String.format("Not found event with ID = %d", eventId));
@@ -119,17 +114,17 @@ public class RequestServiceImpl implements RequestService {
         return event;
     }
 
-    private Request getRequest(long requestId, User user) {
+    private Request getRequest(long requestId, long userId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> {
                     log.error("Not found request with ID = {}", requestId);
                     return new NotFoundException(String.format("Not found request with ID = %d", requestId));
                 });
-        isUsersRequest(user, request);
+        isUsersRequest(userId, request);
         return request;
     }
 
-    private void validateRequest(User user, Event event) {
+    private void validateRequest(UserShortDto user, Event event) {
         List<Request> requests = requestRepository.findAllByEvent(event);
         isRepeatedRequest(user, requests);
         isUserEqualsEventInitiator(user, event);
@@ -137,16 +132,16 @@ public class RequestServiceImpl implements RequestService {
         isRequestLimitReached(event, requests);
     }
 
-    private void isRepeatedRequest(User user, List<Request> requests) {
-        if (requests.stream().anyMatch(request -> request.getUser() == user)) {
+    private void isRepeatedRequest(UserShortDto user, List<Request> requests) {
+        if (requests.stream().anyMatch(request -> request.getUserId() == user.getId())) {
             log.error("Request by user ID = {}  is repeated", user.getId());
             throw  new ConflictDataException(
                     String.format("Request by user ID = %d  is repeated", user.getId()));
         }
     }
 
-    private void isUserEqualsEventInitiator(User user, Event event) {
-        if (event.getInitiator().equals(user)) {
+    private void isUserEqualsEventInitiator(UserShortDto user, Event event) {
+        if (event.getInitiatorId() == user.getId()) {
             log.error("User ID = {} is initiator of event ID = {}", user.getId(), event.getId());
             throw new ConflictDataException(
                     String.format("User ID = %d is initiator of event ID = %d", user.getId(), event.getId()));
@@ -171,11 +166,11 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
-    private void isUsersRequest(User user, Request request) {
-        if (request.getUser() != user) {
-            log.error("User ID = {} is not own request ID = {}", user.getId(), request.getId());
+    private void isUsersRequest(long userId, Request request) {
+        if (request.getUserId() != userId) {
+            log.error("User ID = {} is not own request ID = {}", userId, request.getId());
             throw new NotFoundException(
-                    String.format("Event ID = %d is not own request ID = %d", user.getId(), request.getId()));
+                    String.format("Event ID = %d is not own request ID = %d", userId, request.getId()));
         }
     }
 

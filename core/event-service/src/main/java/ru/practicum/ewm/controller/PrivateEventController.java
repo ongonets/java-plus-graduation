@@ -25,8 +25,8 @@ public class PrivateEventController {
 
     @GetMapping("/{userId}/events")
     public Collection<EventShortDto> findAllEvents(@Positive @PathVariable long userId,
-                                                   @RequestParam(defaultValue = "0") long from,
-                                                   @RequestParam(defaultValue = "10") long size,
+                                                   @RequestParam(defaultValue = "0") int from,
+                                                   @RequestParam(defaultValue = "10") int size,
                                                    HttpServletRequest request) {
         log.info("Request to find user events {}", userId);
         PrivateSearchEventDto paramEventsDto = new PrivateSearchEventDto(userId, from, size, request.getRemoteAddr());

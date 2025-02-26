@@ -1,5 +1,6 @@
 package ru.practicum.ewm.controller;
 
+import feign.FeignException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.FindUsersParams;
 import ru.practicum.ewm.dto.NewUserRequest;
 import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.dto.UserShortDto;
 import ru.practicum.ewm.service.UserService;
 
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "admin/users")
-public class UserController {
+public class UserController implements UserClient {
     private final UserService userService;
 
     @PostMapping
@@ -43,5 +45,10 @@ public class UserController {
     public void deleteUser(@PathVariable @Positive long id) {
         log.info("Received request to delete user with id: {}", id);
         userService.deleteUser(id);
+    }
+
+    @Override
+    public List<UserShortDto> findShortUsers(List<Long> ids) throws FeignException {
+        return userService.findShortUsers(ids);
     }
 }

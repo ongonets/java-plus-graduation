@@ -18,9 +18,9 @@ public class Request {
     public Request() {
     }
 
-    public Request(Event event, User user) {
+    public Request(Event event, Long userId) {
         this.event = event;
-        this.user = user;
+        this.userId = userId;
         status = RequestStatus.PENDING;
         created = LocalDateTime.now();
     }
@@ -33,9 +33,8 @@ public class Request {
     @JoinColumn(name = "event_id")
     Event event;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;
+    @Column(name = "user_id")
+    Long userId;
 
     @Enumerated(value = EnumType.ORDINAL)
     RequestStatus status;

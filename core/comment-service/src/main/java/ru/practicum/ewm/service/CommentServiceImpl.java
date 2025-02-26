@@ -1,11 +1,12 @@
 package ru.practicum.ewm.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.CommentDto;
-import ru.practicum.ewm.dto.NewCommentRequest;
+import ru.practicum.ewm.controller.UserClient;
+import ru.practicum.ewm.dto.*;
 import ru.practicum.ewm.dto.params.CommentParams;
 import ru.practicum.ewm.mapper.CommentMapper;
 import ru.practicum.ewm.model.Comment;
@@ -13,11 +14,8 @@ import ru.practicum.ewm.repository.CommentRepository;
 import ru.practicum.ewm.exception.AccessForbiddenException;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.ewm.dto.ParamEventDto;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.model.User;
-import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,14 +26,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final UserClient userClient;
     private final EventRepository eventRepository;
     private final CommentMapper commentMapper;
 
     @Override
     @Transactional
     public CommentDto createComment(ParamEventDto params, NewCommentRequest request) {
-        User author = getUser(params.getUserId());
+        UserShortDto author = getUser(params.getUserId());
         Event event = getEvent(params.getEventId());
         Comment comment = commentMapper.mapToComment(request, author, event);
         comment = commentRepository.save(comment);
@@ -46,12 +44,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(CommentParams params) {
-        User author = getUser(params.getUserId());
+        long authorId = params.getUserId();
         Comment comment = getComment(params.getCommentId());
-        validateCommentAuthor(author, comment);
+        validateCommentAuthor(authorId, comment);
         commentRepository.delete(comment);
-        log.info("Comment {} was deleted  by user {}",
-                comment.getText(), author.getName());
+        log.info("Comment {} was deleted  by user {}", comment.getText(), authorId);
     }
 
     @Override
@@ -63,16 +60,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> findUserComments(long userId) {
-        User author = getUser(userId);
-        List<Comment> comments = commentRepository.findAllByAuthor(author);
+        List<Comment> comments = commentRepository.findAllByAuthorId(userId);
         return commentMapper.mapToCommentDto(comments);
     }
 
     @Override
     public CommentDto updateComment(CommentParams params, NewCommentRequest request) {
-        User author = getUser(params.getUserId());
         Comment comment = getComment(params.getCommentId());
-        validateCommentAuthor(author, comment);
+        validateCommentAuthor(params.getUserId(), comment);
         validateCommentDate(comment);
         commentMapper.update(comment, request);
         commentRepository.save(comment);
@@ -80,9 +75,9 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.mapToCommentDto(comment);
     }
 
-    private void validateCommentAuthor(User author, Comment comment) {
-        if (!author.getId().equals(comment.getAuthor().getId())) {
-            log.error("User with ID = {} has no rights to delete comment ID = {}", author.getId(), comment.getId());
+    private void validateCommentAuthor(long userId, Comment comment) {
+        if (userId != comment.getAuthorId()) {
+            log.error("User with ID = {} has no rights to delete comment ID = {}", userId, comment.getId());
             throw new AccessForbiddenException("No rights to delete comment");
         }
 
@@ -105,12 +100,13 @@ public class CommentServiceImpl implements CommentService {
                 });
     }
 
-    private User getUser(long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("Not found user with ID = {}", userId);
-                    return new NotFoundException(String.format("Not found user with ID = %d", userId));
-                });
+    private UserShortDto getUser(long userId) {
+        try {
+            return userClient.findShortUsers(List.of(userId)).getFirst();
+        } catch (FeignException e) {
+            log.error("Not found user with ID = {}", userId);
+            throw new NotFoundException(String.format("Not found user with ID = %d", userId));
+        }
     }
 
     private Event getEvent(long eventId) {
@@ -122,11 +118,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Event getUserEvent(ParamEventDto paramEventDto) {
-        long userId = paramEventDto.getUserId();
         long eventId = paramEventDto.getEventId();
-        User user = getUser(userId);
         Event event = getEvent(eventId);
-        if (event.getInitiator() != user) {
+        if (event.getInitiatorId() != paramEventDto.getUserId()) {
             log.error("Event with ID = {} is not found", eventId);
             throw new NotFoundException(
                     String.format("Not found event with ID = %d", eventId));

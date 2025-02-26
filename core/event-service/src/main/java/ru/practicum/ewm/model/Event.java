@@ -28,9 +28,11 @@ public class Event {
     @JoinColumn(name = "category_id")
     Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User initiator;
+    @Column(name = "user_id")
+    Long initiatorId;
+
+    @Column(name = "user_name")
+    String initiatorName;
 
     @Column(name = "created")
     LocalDateTime createdOn;

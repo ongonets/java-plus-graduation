@@ -3,6 +3,7 @@ package ru.practicum.ewm.service;
 import ru.practicum.ewm.dto.FindUsersParams;
 import ru.practicum.ewm.dto.NewUserRequest;
 import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.dto.UserShortDto;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface UserService {
     List<UserDto> findUsers(FindUsersParams params);
 
     void deleteUser(long id);
+
+    List<UserShortDto> findShortUsers(List<Long> ids);
 }

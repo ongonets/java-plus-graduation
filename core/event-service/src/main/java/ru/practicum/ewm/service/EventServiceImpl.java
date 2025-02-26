@@ -2,6 +2,7 @@ package ru.practicum.ewm.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.StatClient;
+import ru.practicum.ewm.controller.UserClient;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.dto.*;
@@ -18,7 +20,6 @@ import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.mapper.EventMapper;
 import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+    private final UserClient userClient;
     private final CategoryRepository categoryRepository;
     //private final RequestRepository requestRepository;
     private final EventMapper eventMapper;
@@ -41,21 +42,21 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public Collection<EventShortDto> findBy(PrivateSearchEventDto privateSearchEventDto) {
-        User user = getUser(privateSearchEventDto.getUserId());
-        List<Event> events = eventRepository
-                .findByInitiator(user, privateSearchEventDto.getSize(), privateSearchEventDto.getFrom());
+    public Collection<EventShortDto> findBy(PrivateSearchEventDto params) {
+        Pageable pageable = PageRequest.of(params.getFrom() / params.getSize(), params.getSize());
+        List<Event> events = eventRepository.findAllByInitiatorId(params.getUserId(), pageable);
         return mapToShortDto(events);
     }
 
     @Override
     @Transactional
     public EventFullDto create(long userId, NewEventDto newEvent) {
-        User user = getUser(userId);
+        UserShortDto user = getUser(userId);
         Category category = getCategory(newEvent.getCategory());
         Event event = eventMapper.map(newEvent);
         event.setCategory(category);
-        event.setInitiator(user);
+        event.setInitiatorId(user.getId());
+        event.setInitiatorName(user.getName());
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
         eventRepository.save(event);
@@ -150,12 +151,13 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private User getUser(long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("Not found user with ID = {}", userId);
-                    return new NotFoundException(String.format("Not found user with ID = %d", userId));
-                });
+    private UserShortDto getUser(long userId) {
+        try {
+            return userClient.findShortUsers(List.of(userId)).getFirst();
+        } catch (FeignException e) {
+            log.error("Not found user with ID = {}", userId);
+            throw new NotFoundException(String.format("Not found user with ID = %d", userId));
+        }
     }
 
     private Event getEvent(long eventId) {
@@ -169,9 +171,8 @@ public class EventServiceImpl implements EventService {
     private Event getUserEvent(ParamEventDto paramEventDto) {
         long userId = paramEventDto.getUserId();
         long eventId = paramEventDto.getEventId();
-        User user = getUser(userId);
         Event event = getEvent(eventId);
-        if (event.getInitiator() != user) {
+        if (event.getInitiatorId() != userId) {
             log.error("Event with ID = {} is not found", eventId);
             throw new NotFoundException(
                     String.format("Not found event with ID = %d", eventId));
@@ -315,7 +316,7 @@ public class EventServiceImpl implements EventService {
     private List<EventShortDto> mapToShortDto(List<Event> events) {
         Map<Long, Long> countConfirmedRequest = getCountConfirmedRequest(events);
         Map<Long, Long> stat = getStat(events);
-        return  events.stream()
+        return events.stream()
                 .map(event -> {
                     Long confirmedCount = countConfirmedRequest.get(event.getId());
                     Long statValue = stat.get(event.getId());

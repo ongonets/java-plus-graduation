@@ -16,13 +16,19 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String text;
+
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
+
+    @Column(name = "author_id")
+    private Long authorId;
+
+    @Column(name = "author_name")
+    private Long authorName;
+
     private LocalDateTime created;
 
     @Override

@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import ru.practicum.ewm.dto.CommentDto;
 import ru.practicum.ewm.dto.NewCommentRequest;
+import ru.practicum.ewm.dto.UserShortDto;
 import ru.practicum.ewm.model.Comment;
 import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,18 +16,19 @@ import java.util.List;
 public interface CommentMapper {
 
     @Mapping(target = "eventId", source = "comment.event.id")
-    @Mapping(target = "authorName", source = "comment.author.name")
     CommentDto mapToCommentDto(Comment comment);
 
     List<CommentDto> mapToCommentDto(List<Comment> comments);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", source = "author")
+    @Mapping(target = "authorId", source = "author.id")
+    @Mapping(target = "authorName", source = "author.name")
     @Mapping(target = "created", expression = "java(LocalDateTime.now())")
-    Comment mapToComment(NewCommentRequest request, User author, Event event);
+    Comment mapToComment(NewCommentRequest request, UserShortDto author, Event event);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "authorId", ignore = true)
+    @Mapping(target = "authorName", ignore = true)
     @Mapping(target = "created", ignore = true)
     @Mapping(target = "event", ignore = true)
     void update(@MappingTarget Comment comment, NewCommentRequest updateComment);

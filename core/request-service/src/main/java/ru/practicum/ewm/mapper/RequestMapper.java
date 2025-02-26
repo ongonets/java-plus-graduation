@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RequestMapper {
 
-    @Mapping(expression = "java(request.getUser().getId())", target = "requester")
+    @Mapping(expression = "java(request.getUserId())", target = "requester")
     @Mapping(expression = "java(request.getEvent().getId())", target = "event")
     ParticipationRequestDto mapToDto(Request request);
 

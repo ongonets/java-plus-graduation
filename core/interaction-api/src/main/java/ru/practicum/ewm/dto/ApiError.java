@@ -1,4 +1,4 @@
-package ru.practicum.ewm.errorHandler.model;
+package ru.practicum.ewm.dto;
 
 import lombok.AccessLevel;
 import lombok.Data;

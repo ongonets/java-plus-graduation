@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.dto.UserShortDto;
 import ru.practicum.ewm.exception.ConflictDataException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.dto.FindUsersParams;
@@ -52,6 +53,12 @@ public class UserServiceImpl implements UserService {
                     return new NotFoundException("Not found user with ID = " + id);
                 });
         userRepository.delete(userToDelete);
+    }
+
+    @Override
+    public List<UserShortDto> findShortUsers(List<Long> ids) {
+        List<User> users = userRepository.findAllById(ids);
+        return userMapper.mapToUserShortDto(users);
     }
 
     private void isEmailUnique(String email) {
