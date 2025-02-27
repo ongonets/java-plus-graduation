@@ -8,9 +8,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class EwmApplication {
+public class EventApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(EwmApplication.class,args);
+        SpringApplication.run(EventApp.class, args);
     }
 }

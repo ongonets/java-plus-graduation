@@ -19,15 +19,14 @@ public class Comment {
 
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @Column(name = "event_id")
+    private Long eventId;
 
     @Column(name = "author_id")
     private Long authorId;
 
     @Column(name = "author_name")
-    private Long authorName;
+    private String authorName;
 
     private LocalDateTime created;
 

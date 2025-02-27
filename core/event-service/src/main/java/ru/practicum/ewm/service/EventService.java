@@ -20,4 +20,6 @@ public interface EventService {
     EventFullDto update(ParamEventDto paramEventDto, UpdateEventUserRequest updateEvent);
 
     EventFullDto update(long eventId, UpdateEventUserRequest updateEvent);
+
+    EventWithInitiatorDto findBy(long eventId);
 }

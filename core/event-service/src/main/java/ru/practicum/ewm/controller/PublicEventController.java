@@ -1,5 +1,6 @@
 package ru.practicum.ewm.controller;
 
+import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.EventShortDto;
+import ru.practicum.ewm.dto.EventWithInitiatorDto;
 import ru.practicum.ewm.dto.PublicSearchEventParams;
 import ru.practicum.ewm.model.Sorting;
 import ru.practicum.ewm.service.EventService;
@@ -21,7 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/events")
-public class PublicEventController {
+public class PublicEventController implements EventClient {
     private final EventService eventService;
 
     @GetMapping
@@ -45,5 +47,10 @@ public class PublicEventController {
     public EventFullDto findEventById(@Positive @PathVariable long id, HttpServletRequest request) {
         log.info("Received public request to find event with ID = {}", id);
         return eventService.findEventByIdPublic(id, request.getRemoteAddr());
+    }
+
+    @Override
+    public EventWithInitiatorDto findEventWithInitiator(long eventId) throws FeignException {
+        return eventService.findBy(eventId);
     }
 }

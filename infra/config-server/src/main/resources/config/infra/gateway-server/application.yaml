@@ -8,8 +8,14 @@ spring:
           predicates:
             - Path=/admin/users/**
 
+        - id: comment_service_route
+          uri: lb://comment-service
+          predicates:
+            - Path=/users/{userId}/comments/**,/users/{userId}/events/{eventId}/comments/**
+
+
         - id: main_service_route
-          uri: lb://main-service
+          uri: lb://event-service
           predicates:
             - Path=/**
 

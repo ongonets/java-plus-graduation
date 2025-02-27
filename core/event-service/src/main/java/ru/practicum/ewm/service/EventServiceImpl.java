@@ -135,6 +135,12 @@ public class EventServiceImpl implements EventService {
         return eventMapper.mapToFullDto(event, stat.get(event.getId()), countConfirmedRequest.get(event.getId()));
     }
 
+    @Override
+    public EventWithInitiatorDto findBy(long eventId) {
+        Event event = getEvent(eventId);
+        return eventMapper.mapToInitiatorDto(event);
+    }
+
     private Category getCategory(long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> {

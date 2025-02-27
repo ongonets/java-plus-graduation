@@ -31,6 +31,8 @@ public interface EventMapper {
     @Mapping(expression = "java(getUser(event))", target = "initiator")
     EventShortDto mapToShortDto(Event event, Long hits, Long countConfirmedRequest);
 
+    EventWithInitiatorDto mapToInitiatorDto(Event event);
+
     @Mapping(source = "latitude", target = "lat")
     @Mapping(source = "longitude", target = "lon")
     Location getLocation(Event event);
