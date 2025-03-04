@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.StatClient;
+import ru.practicum.ewm.controller.RequestClient;
 import ru.practicum.ewm.controller.UserClient;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.repository.CategoryRepository;
@@ -34,7 +35,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserClient userClient;
     private final CategoryRepository categoryRepository;
-    //private final RequestRepository requestRepository;
+    private final RequestClient requestClient;
     private final EventMapper eventMapper;
     private final StatClient statClient;
 
@@ -187,9 +188,13 @@ public class EventServiceImpl implements EventService {
     }
 
     private Map<Long, Long> getCountConfirmedRequest(List<Event> events) {
-//        return requestRepository.findConfirmedRequest(events)
-//                .collect(Collectors.toMap(RequestCountDto::getEventId, RequestCountDto::getCount));
-        return new HashMap<>();
+        List<Long> ids = events.stream().map(Event::getId).toList();
+        try {
+            return requestClient.findConfirmedRequest(ids).stream()
+                    .collect(Collectors.toMap(RequestCountDto::getEventId, RequestCountDto::getCount));
+        } catch (RuntimeException e) {
+            return new HashMap<>();
+        }
     }
 
     private Map<Long, Long> getStat(List<Event> events) {
@@ -268,8 +273,8 @@ public class EventServiceImpl implements EventService {
     private Predicate buildQueryAdmin(AdminSearchEventDto params) {
         BooleanBuilder searchParams = new BooleanBuilder();
 
-        /*if (params.getUsers() != null && !params.getUsers().isEmpty()) {
-            searchParams.and(QEvent.event.initiator.id.in(params.getUsers()));
+        if (params.getUsers() != null && !params.getUsers().isEmpty()) {
+            searchParams.and(QEvent.event.initiatorId.in(params.getUsers()));
         }
         if (params.getStates() != null && !params.getStates().isEmpty()) {
             searchParams.and(QEvent.event.state.in(params.getStates()));
@@ -282,7 +287,7 @@ public class EventServiceImpl implements EventService {
         }
         if (params.getRangeEnd() != null) {
             searchParams.and(QEvent.event.eventDate.before(params.getRangeEnd()));
-        }*/
+        }
 
         return searchParams;
     }
@@ -290,7 +295,7 @@ public class EventServiceImpl implements EventService {
     private Predicate buildQueryPublic(PublicSearchEventParams params) {
         BooleanBuilder searchParams = new BooleanBuilder();
 
-       /* if (params.getText() != null && !params.getText().isBlank()) {
+        if (params.getText() != null && !params.getText().isBlank()) {
             searchParams.and(QEvent.event.description.contains(params.getText())
                     .or(QEvent.event.annotation.contains(params.getText())));
         }
@@ -305,7 +310,7 @@ public class EventServiceImpl implements EventService {
         }
         if (params.getRangeEnd() != null) {
             searchParams.and(QEvent.event.eventDate.before(params.getRangeEnd()));
-        }*/
+        }
 
         return searchParams;
     }

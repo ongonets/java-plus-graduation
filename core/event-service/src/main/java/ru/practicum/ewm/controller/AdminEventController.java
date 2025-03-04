@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.AdminSearchEventDto;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.UpdateEventUserRequest;
-import ru.practicum.ewm.model.EventState;
+import ru.practicum.ewm.dto.EventState;
 import ru.practicum.ewm.service.EventService;
 
 import java.time.LocalDateTime;

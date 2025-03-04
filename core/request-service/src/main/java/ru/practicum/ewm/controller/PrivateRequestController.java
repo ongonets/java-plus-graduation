@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.ParamEventDto;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.dto.*;
 import ru.practicum.ewm.service.RequestService;
 
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class PrivateRequestController {
+public class PrivateRequestController implements RequestClient{
 
     private final RequestService requestService;
 
@@ -37,5 +34,10 @@ public class PrivateRequestController {
         ParamEventDto paramEventDto = new ParamEventDto(userId, eventId);
         log.info("Request to update eventRequests {}", paramEventDto);
         return requestService.updateRequest(paramEventDto, updateEvent);
+    }
+
+    @Override
+    public List<RequestCountDto> findConfirmedRequest(List<Long> ids) {
+        return requestService.findConfirmedRequest(ids);
     }
 }

@@ -15,5 +15,7 @@ public class EventWithInitiatorDto {
 
     long id;
     long initiatorId;
-
+    EventState state;
+    long participantLimit;
+    boolean requestModeration;
 }

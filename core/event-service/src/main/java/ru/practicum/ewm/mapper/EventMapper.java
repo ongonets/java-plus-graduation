@@ -18,6 +18,11 @@ public interface EventMapper {
     @Mapping(expression = "java(newEvent.getLocation().getLon())", target = "longitude")
     @Mapping(target = "publishedOn", expression = "java(LocalDateTime.now())")
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "initiatorId", ignore = true)
+    @Mapping(target = "initiatorName", ignore = true)
+    @Mapping(target = "createdOn", ignore = true)
+    @Mapping(target = "state", ignore = true)
     Event map(NewEventDto newEvent);
 
     @Mapping(source = "views", target = "views")
@@ -42,6 +47,11 @@ public interface EventMapper {
     UserShortDto getUser(Event event);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "initiatorId", ignore = true)
+    @Mapping(target = "initiatorName", ignore = true)
+    @Mapping(target = "createdOn", ignore = true)
+    @Mapping(target = "publishedOn", ignore = true)
+    @Mapping(target = "state", ignore = true)
     @Mapping(source = "category", target = "category")
     @Mapping(source = "updateEvent.annotation", target = "annotation", qualifiedByName = "unwrap")
     @Mapping(source = "updateEvent.description", target = "description", qualifiedByName = "unwrap")

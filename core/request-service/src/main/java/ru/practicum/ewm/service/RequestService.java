@@ -1,9 +1,6 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.dto.ParamEventDto;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewm.dto.EventRequestStatusUpdateResult;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.dto.*;
 
 import java.util.List;
 
@@ -18,4 +15,6 @@ public interface RequestService {
 
     EventRequestStatusUpdateResult updateRequest(ParamEventDto paramEventDto,
                                                  EventRequestStatusUpdateRequest updateRequest);
+
+    List<RequestCountDto> findConfirmedRequest(List<Long> ids);
 }

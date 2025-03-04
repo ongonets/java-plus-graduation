@@ -18,8 +18,8 @@ public class Request {
     public Request() {
     }
 
-    public Request(Event event, Long userId) {
-        this.event = event;
+    public Request(Long eventId, Long userId) {
+        this.eventId = eventId;
         this.userId = userId;
         status = RequestStatus.PENDING;
         created = LocalDateTime.now();
@@ -29,9 +29,8 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    Event event;
+    @Column(name = "event_id")
+    long eventId;
 
     @Column(name = "user_id")
     Long userId;
