@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class PrivateRequestController implements RequestClient{
+public class PrivateRequestController implements RequestClient {
 
     private final RequestService requestService;
 
