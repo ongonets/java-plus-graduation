@@ -37,6 +37,14 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
+      user-service:
+        condition: service_healthy
+      event-service:
+        condition: service_healthy
+      request-service:
+        condition: service_healthy
+      comment-service:
+        condition: service_healthy
     networks:
       - ewm-net
     environment:
