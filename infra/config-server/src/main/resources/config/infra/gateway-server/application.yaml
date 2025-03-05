@@ -24,7 +24,9 @@ spring:
             - Path=/**
 
 
-
+eureka:
+  client:
+    eureka-service-url-poll-interval-seconds: 1
 
 
 server:
