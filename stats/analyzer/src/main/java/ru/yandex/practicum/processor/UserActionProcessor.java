@@ -8,7 +8,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
 import ru.yandex.practicum.AnalyzerConfig;
-import ru.yandex.practicum.handlers.UserActionHandler;
+import ru.yandex.practicum.handler.UserActionHandler;
 
 import java.util.HashMap;
 import java.util.Map;

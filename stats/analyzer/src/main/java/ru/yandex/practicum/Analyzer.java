@@ -17,7 +17,7 @@ public class Analyzer {
 
 
 
-        EventSimilarityProcessor eventSimilarityProcessor =
+        final EventSimilarityProcessor eventSimilarityProcessor =
                 context.getBean(EventSimilarityProcessor.class);
 
         final UserActionProcessor userActionProcessor =
@@ -26,12 +26,15 @@ public class Analyzer {
         Runtime.getRuntime().addShutdownHook(new Thread(eventSimilarityProcessor::stop));
         Runtime.getRuntime().addShutdownHook(new Thread(userActionProcessor::stop));
 
+        Thread eventSimilarityProcessorThread = new Thread(eventSimilarityProcessor);
+        eventSimilarityProcessorThread.setName("UserActionProcessorThread");
+        eventSimilarityProcessorThread.start();
 
-        Thread hubEventsThread = new Thread(userActionProcessor);
-        hubEventsThread.setName("UserActionProcessorThread");
-        hubEventsThread.start();
+        Thread userActionProcessorThread = new Thread(userActionProcessor);
+        userActionProcessorThread.setName("UserActionProcessorThread");
+        userActionProcessorThread.start();
 
 
-        eventSimilarityProcessor.start();
+
     }
 }

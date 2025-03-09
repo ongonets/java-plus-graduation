@@ -9,7 +9,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 import ru.yandex.practicum.AnalyzerConfig;
-import ru.yandex.practicum.handlers.EventSimilarityHandler;
+import ru.yandex.practicum.handler.EventSimilarityHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class EventSimilarityProcessor {
+public class EventSimilarityProcessor implements Runnable {
 
     private static final int COUNT_COMMIT_OFFSETS = 10;
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
@@ -27,7 +27,8 @@ public class EventSimilarityProcessor {
     private final AnalyzerConfig config;
 
 
-    public void start() {
+    @Override
+    public void run() {
         try {
             consumer.subscribe(config.getSimilarityTopics());
 
