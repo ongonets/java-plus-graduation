@@ -1,4 +1,4 @@
-package ru.yandex.practicum;
+package ru.yandex.practicum.processor;
 
 
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,16 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
+import ru.yandex.practicum.AggregatorConfig;
+import ru.yandex.practicum.handler.RecordHandler;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AggregationStarter {
+public class AggregationProcessor {
 
     private static final int COUNT_COMMIT_OFFSETS = 10;
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
@@ -39,21 +42,8 @@ public class AggregationStarter {
 
                 int count = 0;
                 for (ConsumerRecord<String, UserActionAvro> record : records) {
-                    Optional<EventSimilarityAvro> eventSimilarityAvroOpt = recordHandler.updateState(record.value());
-                    if (eventSimilarityAvroOpt.isPresent()) {
-                        EventSimilarityAvro userActionAvro = eventSimilarityAvroOpt.get();
-                        ProducerRecord<String, SpecificRecordBase> producerRecord =
-                                new ProducerRecord<>(aggregatorConfig.getSimilarityTopic(),
-                                        null,
-                                        userActionAvro.getTimestamp().getEpochSecond(),
-                                        null,
-                                        userActionAvro);
-                        producer.send(producerRecord);
-                        log.info("Event similarity for events A = {} and B = {} send to topic: {}",
-                                userActionAvro.getEventA(),
-                                userActionAvro.getEventB(),
-                                aggregatorConfig.getSimilarityTopic());
-                    }
+                    Stream<EventSimilarityAvro> eventSimilarityAvroStream = recordHandler.handle(record.value());
+                    eventSimilarityAvroStream.forEach(this::sendToTopic);
                     manageOffsets(record, count, consumer);
                     count++;
                 }
@@ -79,6 +69,21 @@ public class AggregationStarter {
 
     public void stop() {
         consumer.wakeup();
+    }
+
+    private void sendToTopic(EventSimilarityAvro eventSimilarityAvro) {
+        ProducerRecord<String, SpecificRecordBase> producerRecord =
+                new ProducerRecord<>(aggregatorConfig.getSimilarityTopic(),
+                        null,
+                        eventSimilarityAvro.getTimestamp().getEpochSecond(),
+                        null,
+                        eventSimilarityAvro);
+        producer.send(producerRecord);
+        log.info("Event similarity for events A = {} and B = {}: {} send to topic: {}",
+                eventSimilarityAvro.getEventA(),
+                eventSimilarityAvro.getEventB(),
+                eventSimilarityAvro.getScore(),
+                aggregatorConfig.getSimilarityTopic());
     }
 
     private static void manageOffsets(ConsumerRecord<String, UserActionAvro> record, int count,

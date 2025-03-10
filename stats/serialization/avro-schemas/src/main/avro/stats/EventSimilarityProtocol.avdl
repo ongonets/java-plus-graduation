@@ -2,9 +2,9 @@
 protocol EventSimilarityProtocol {
 
 	record EventSimilarityAvro{
-		int eventA;
-		int eventB;
-		float score;
+		long eventA;
+		long eventB;
+		double score;
 		timestamp_ms timestamp;
 	}
 }
