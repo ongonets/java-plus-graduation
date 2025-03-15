@@ -37,17 +37,22 @@ public class RecordHandler {
             return Stream.empty();
         }
         updateUserWeight(userId, eventA, weight);
-        if (isEventExist(eventA)) {
+        if (oldWeight == 0) {
+            addEventWeightSum(eventA, weight);
+            addMinWeightSum(userId, weight, eventA);
+        } else {
             updateEventWeightSum(eventA, weight, oldWeight);
             updateMinWeightSum(userId, weight, oldWeight, eventA);
-        } else {
-            eventWeightSums.put(eventA, weight - oldWeight);
         }
         return calculateScore(eventA, userAction.getTimestamp());
     }
 
     private void updateEventWeightSum(long eventA, double weight, double oldWeight) {
         eventWeightSums.compute(eventA, (k, oldEventWeightSum) -> oldEventWeightSum + weight - oldWeight);
+    }
+
+    private void addEventWeightSum(long eventA, double weight) {
+        eventWeightSums.put(eventA, weight);
     }
 
     private Stream<EventSimilarityAvro> calculateScore(long eventA, Instant timestamp) {
@@ -76,6 +81,14 @@ public class RecordHandler {
         double minWeightSum = getMinWeightSum(eventA, eventB);
         putMinWeightSum(eventA, eventB, minWeightSum + deltaMinSum);
     }
+
+    private void addMinWeightSum(long userId, double weight, long eventA) {
+        userWeights.entrySet().stream()
+                .filter(e -> e.getKey() != eventA)
+                .filter(e -> e.getValue().containsKey(userId))
+                .forEach(e -> putMinWeightSum(eventA, e.getKey(), weight));
+    }
+
 
     private double getDeltaMinSum(long userId, double weightEventA, double oldWeightEventA, long eventB) {
         double weightEventB = getUserWeight(userId, eventB);
@@ -138,9 +151,5 @@ public class RecordHandler {
                 .setTimestamp(timestamp)
                 .setScore(score)
                 .build();
-    }
-
-    private boolean isEventExist(long eventA) {
-        return eventWeightSums.containsKey(eventA);
     }
 }
