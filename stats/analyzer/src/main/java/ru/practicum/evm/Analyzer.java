@@ -1,11 +1,11 @@
-package ru.yandex.practicum;
+package ru.practicum.evm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
-import ru.yandex.practicum.processor.UserActionProcessor;
-import ru.yandex.practicum.processor.EventSimilarityProcessor;
+import ru.practicum.evm.processor.UserActionProcessor;
+import ru.practicum.evm.processor.EventSimilarityProcessor;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan

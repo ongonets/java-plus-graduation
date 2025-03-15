@@ -1,4 +1,4 @@
-package ru.yandex.practicum.processor;
+package ru.practicum.evm.processor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.stats.avro.UserActionAvro;
-import ru.yandex.practicum.AnalyzerConfig;
-import ru.yandex.practicum.handler.UserActionHandler;
+import ru.practicum.evm.AnalyzerConfig;
+import ru.practicum.evm.handler.UserActionHandler;
 
 import java.util.HashMap;
 import java.util.Map;

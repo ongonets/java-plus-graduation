@@ -1,4 +1,4 @@
-package ru.yandex.practicum.processor;
+package ru.practicum.evm.processor;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
-import ru.yandex.practicum.AnalyzerConfig;
-import ru.yandex.practicum.handler.EventSimilarityHandler;
+import ru.practicum.evm.AnalyzerConfig;
+import ru.practicum.evm.handler.EventSimilarityHandler;
 
 import java.util.HashMap;
 import java.util.Map;

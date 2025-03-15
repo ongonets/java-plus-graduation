@@ -1,4 +1,4 @@
-package ru.yandex.practicum.handlers;
+package ru.yandex.practicum.handler;
 
 import com.google.protobuf.Timestamp;
 import lombok.RequiredArgsConstructor;

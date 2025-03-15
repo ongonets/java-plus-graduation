@@ -1,4 +1,4 @@
-package ru.yandex.practicum.handlers;
+package ru.yandex.practicum.handler;
 
 import ru.practicum.ewm.stats.proto.UserActionProto;
 
