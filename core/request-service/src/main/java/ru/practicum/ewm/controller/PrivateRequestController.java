@@ -40,4 +40,9 @@ public class PrivateRequestController implements RequestClient {
     public List<RequestCountDto> findConfirmedRequest(List<Long> ids) {
         return requestService.findConfirmedRequest(ids);
     }
+
+    @Override
+    public boolean isUserParticipatedInEvent(long userId, long eventId) {
+        return requestService.isUserParticipatedInEvent(userId, eventId);
+    }
 }

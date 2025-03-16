@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class UserAction implements Comparable<UserAction>{
+public class UserAction implements Comparable<UserAction> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

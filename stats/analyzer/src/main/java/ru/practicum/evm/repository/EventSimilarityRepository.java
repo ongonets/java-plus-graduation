@@ -9,7 +9,6 @@ import ru.practicum.evm.dto.RecommendedEvent;
 import ru.practicum.evm.model.EventSimilarity;
 import ru.practicum.evm.model.SimilarityId;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 public interface EventSimilarityRepository extends JpaRepository<EventSimilarity, SimilarityId> {

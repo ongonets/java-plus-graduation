@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RecommendedEvent implements Comparable<RecommendedEvent>{
+public class RecommendedEvent implements Comparable<RecommendedEvent> {
 
     private long eventId;
 

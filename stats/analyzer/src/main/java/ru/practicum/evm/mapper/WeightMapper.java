@@ -4,9 +4,9 @@ import ru.practicum.ewm.stats.avro.ActionTypeAvro;
 
 public class WeightMapper {
 
-    private final static double LIKE_WEIGHT = 1.0;
-    private final static double REGISTER_WEIGHT = 0.8;
-    private final static double VIEW_WEIGHT = 0.4;
+    private static final double LIKE_WEIGHT = 1.0;
+    private static final double REGISTER_WEIGHT = 0.8;
+    private static final double VIEW_WEIGHT = 0.4;
 
 
     static double mapToWeight(ActionTypeAvro typeAvro) {

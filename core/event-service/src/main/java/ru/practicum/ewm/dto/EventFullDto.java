@@ -31,5 +31,5 @@ public class EventFullDto {
     EventState state;
     boolean paid;
     String title;
-    long views;
+    long rating;
 }

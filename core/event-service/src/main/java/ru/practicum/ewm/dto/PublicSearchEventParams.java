@@ -22,5 +22,4 @@ public class PublicSearchEventParams {
     Sorting sort;
     int from;
     int size;
-    String ip;
 }
