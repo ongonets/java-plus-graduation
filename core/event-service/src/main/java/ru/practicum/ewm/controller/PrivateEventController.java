@@ -43,12 +43,10 @@ public class PrivateEventController {
 
     @GetMapping("/{userId}/events/{eventId}")
     public EventFullDto findEvent(@Positive @PathVariable long userId,
-                                  @Positive @PathVariable long eventId,
-                                  HttpServletRequest request) {
+                                  @Positive @PathVariable long eventId) {
         ParamEventDto paramEventDto = new ParamEventDto(userId, eventId);
-        String remoteAddr = request.getRemoteAddr();
         log.info("Request to find event {}", paramEventDto);
-        return eventService.findBy(paramEventDto,remoteAddr);
+        return eventService.findBy(paramEventDto);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")

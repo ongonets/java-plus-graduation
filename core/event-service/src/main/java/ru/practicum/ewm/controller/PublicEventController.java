@@ -1,7 +1,6 @@
 package ru.practicum.ewm.controller;
 
 import feign.FeignException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,18 +34,29 @@ public class PublicEventController implements EventClient {
                                                 @RequestParam(required = false) boolean onlyAvailable,
                                                 @RequestParam(required = false) Sorting sort,
                                                 @RequestParam(defaultValue = "0") int from,
-                                                @RequestParam(defaultValue = "10") int size,
-                                                HttpServletRequest request) {
+                                                @RequestParam(defaultValue = "10") int size) {
         PublicSearchEventParams params = new PublicSearchEventParams(text, categories, paid, rangeStart, rangeEnd,
-                onlyAvailable, sort, from, size, request.getRemoteAddr());
+                onlyAvailable, sort, from, size);
         log.info("Received public request to find events with params: {}", params);
         return eventService.findEventsPublic(params);
     }
 
     @GetMapping("/{id}")
-    public EventFullDto findEventById(@Positive @PathVariable long id, HttpServletRequest request) {
+    public EventFullDto findEventById(@Positive @PathVariable long id, @RequestHeader("X-EWM-USER-ID") long userId) {
         log.info("Received public request to find event with ID = {}", id);
-        return eventService.findEventByIdPublic(id, request.getRemoteAddr());
+        return eventService.findEventByIdPublic(id, userId);
+    }
+
+    @GetMapping("/recommendations")
+    public Collection<EventShortDto> findRecommendations(@RequestHeader("X-EWM-USER-ID") long userId) {
+        log.info("Received request to find recommendation for user ID = {}", userId);
+        return eventService.findRecommendations(userId);
+    }
+
+    @PutMapping("/{eventId}/like")
+    public void addLike(@Positive @PathVariable long eventId, @RequestHeader("X-EWM-USER-ID") long userId) {
+        log.info("Received request to like event ID = {} by user ID = {}", eventId, userId);
+        eventService.addLike(eventId, userId);
     }
 
     @Override

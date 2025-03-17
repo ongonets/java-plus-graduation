@@ -10,8 +10,6 @@
     </parent>
 
     <artifactId>stats-client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -27,9 +25,16 @@
 
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>stats-dto</artifactId>
+            <artifactId>avro-schemas</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>ru.practicum</groupId>
+            <artifactId>proto-schemas</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -37,14 +42,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webflux</artifactId>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>3.1.0.RELEASE</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -55,6 +57,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

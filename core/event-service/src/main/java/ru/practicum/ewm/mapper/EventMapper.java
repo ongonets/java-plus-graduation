@@ -25,16 +25,16 @@ public interface EventMapper {
     @Mapping(target = "state", ignore = true)
     Event map(NewEventDto newEvent);
 
-    @Mapping(source = "views", target = "views")
+    @Mapping(source = "rating", target = "rating")
     @Mapping(expression = "java(getLocation(event))", target = "location")
     @Mapping(expression = "java(getUser(event))", target = "initiator")
     @Mapping(source = "countConfirmedRequest", target = "confirmedRequests")
-    EventFullDto mapToFullDto(Event event, Long views, Long countConfirmedRequest);
+    EventFullDto mapToFullDto(Event event, Double rating, Long countConfirmedRequest);
 
-    @Mapping(source = "hits", target = "views")
+    @Mapping(source = "rating", target = "rating")
     @Mapping(source = "countConfirmedRequest", target = "confirmedRequests")
     @Mapping(expression = "java(getUser(event))", target = "initiator")
-    EventShortDto mapToShortDto(Event event, Long hits, Long countConfirmedRequest);
+    EventShortDto mapToShortDto(Event event, Double rating, Long countConfirmedRequest);
 
     EventWithInitiatorDto mapToInitiatorDto(Event event);
 

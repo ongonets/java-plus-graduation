@@ -13,3 +13,11 @@ spring:
       mode: always
   datasource:
     driverClassName: org.postgresql.Driver
+
+grpc:
+  client:
+    collector-client:
+      address: 'discovery:///collector'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

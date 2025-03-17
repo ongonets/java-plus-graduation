@@ -19,4 +19,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "AND r.status = ru.practicum.ewm.model.RequestStatus.CONFIRMED " +
             "GROUP BY r.eventId")
     List<RequestCountDto> findConfirmedRequest(@Param("ids") List<Long> ids);
+
+    boolean existsByUserIdAndEventId(long userId, long eventId);
 }

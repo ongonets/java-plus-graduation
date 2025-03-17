@@ -16,3 +16,11 @@ spring:
     url: jdbc:h2:mem:ewm
     username: ewm
     password: ewm
+
+grpc:
+  client:
+    collector-client:
+      address: 'discovery:///collector'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
