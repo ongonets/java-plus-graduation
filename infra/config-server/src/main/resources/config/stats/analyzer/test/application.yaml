@@ -1,5 +1,6 @@
-server:
-  port: 0
+grpc:
+  server:
+    port: 0
 
 spring:
   jpa:
@@ -12,11 +13,18 @@ spring:
     init:
       mode: always
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:stat
-    username: stat
-    password: stat
-
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://172.18.0.2:5432/ewm-stats
+    username: root
+    password: root
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        orm:
+          jdbc:
+            bind: trace
 
 analyzer:
   action-consumer-properties:
